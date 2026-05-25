@@ -1,0 +1,91 @@
+
+
+import math
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Función
+def f(x):
+    return math.cos(x) - x
+
+# Intervalo inicial
+a = 0
+b = 1
+
+# Tolerancia
+tol = 1e-5
+
+# Listas para almacenar resultados
+iteraciones = []
+errores = []
+
+# Verificar cambio de signo
+if f(a) * f(b) >= 0:
+    print("El intervalo no es válido.")
+
+else:
+
+    i = 1
+    error = abs(b - a)
+
+    while error > tol:
+
+        # Punto medio
+        c = (a + b) / 2
+
+        # Guardar datos
+        iteraciones.append([
+            i,
+            a,
+            b,
+            c,
+            f(c),
+            error
+        ])
+
+        errores.append(error)
+
+        # Método de bisección
+        if f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+
+        # Nuevo error
+        error = abs(b - a)
+
+        i += 1
+
+# Crear tabla
+tabla = pd.DataFrame(
+    iteraciones,
+    columns=[
+        "Iteración",
+        "a",
+        "b",
+        "c",
+        "f(c)",
+        "Error"
+    ]
+)
+
+# Mostrar tabla
+print("\nTABLA DE ITERACIONES")
+print(tabla)
+
+# Resultado final
+print("\nRaíz aproximada:", c)
+print("Número de iteraciones:", i - 1)
+
+# Gráfica de convergencia
+plt.plot(range(1, len(errores)+1), errores, marker='o')
+
+plt.yscale('log')
+
+plt.xlabel('Iteración')
+plt.ylabel('Error')
+plt.title('Convergencia del Método de Bisección')
+
+plt.grid(True)
+
+plt.show()
